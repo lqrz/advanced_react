@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -57,8 +57,11 @@ const StyleNavElements = ({ children, margin }) => {
 };
 
 const Header = () => {
+  const [click, setClick] = useState("");
   const handleClick = (anchor) => () => {
+    console.log(anchor);
     const id = `${anchor}-section`;
+    console.log(id);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({
@@ -67,6 +70,12 @@ const Header = () => {
       });
     }
   };
+
+  useEffect(() => {
+    console.log(`there was a click: ${click}`);
+    handleClick(click)();
+    return () => setClick("");
+  }, [click]);
 
   return (
     <Box
@@ -98,7 +107,15 @@ const Header = () => {
           </nav>
           <nav>
             <HStack spacing={8}>
-              {/* Add links to Projects and Contact me section */}
+              <Link onClick={() => setClick("contactme")}>
+                {/* <Link onClick={handleClick}> */}
+                {/* <a href="/#contact-me" target="_self" onClick={() => setClick('contactme')} rel="noreferrer"> */}
+                Contact me
+              </Link>
+              {/* </a> */}
+              <a href="/#projects" onClick={handleClick}>
+                Projects
+              </a>
             </HStack>
           </nav>
         </HStack>
