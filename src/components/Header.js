@@ -59,9 +59,7 @@ const StyleNavElements = ({ children, margin }) => {
 const Header = () => {
   const [click, setClick] = useState("");
   const handleClick = (anchor) => () => {
-    console.log(anchor);
     const id = `${anchor}-section`;
-    console.log(id);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({
@@ -72,7 +70,6 @@ const Header = () => {
   };
 
   useEffect(() => {
-    console.log(`there was a click: ${click}`);
     handleClick(click)();
     return () => setClick("");
   }, [click]);
