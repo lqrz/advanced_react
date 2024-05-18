@@ -96,20 +96,6 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const scrollDown = scrollPosition - previousScrollPosition > 0;
-    const translation = scrollDown ? "-200px" : "0px";
-  }, [scrollPosition]);
-
-  // Your logic should change the transform property of the underlying Box DOM element depending on the scroll direction.
-  // When scrolling up, the transform style property from the Box DOM element should be translateY(0).
-  // When scrolling down, the transform style property from the Box DOM element should be translateY(-200px)
-  //
-  // The useEffect hook
-  // The useRef hook
-  // Setting up listeners for the scroll eventwindow.addEventListener('scroll', handleScroll)
-  // Removing listeners for the scroll event:window.removeEventListener('scroll', handleScroll)
-  // Keeping track of the previous scroll position in a variable
   const translation =
     previousScrollPosition !== undefined &&
     scrollPosition - previousScrollPosition > 0
