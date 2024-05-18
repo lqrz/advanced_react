@@ -7,7 +7,7 @@ import {
   faMedium,
   faStackOverflow,
 } from "@fortawesome/free-brands-svg-icons";
-import { Box, HStack, Link, color } from "@chakra-ui/react";
+import { Box, HStack, Link, color, keyframes } from "@chakra-ui/react";
 
 const socials = [
   {
@@ -56,8 +56,20 @@ const StyleNavElements = ({ children, margin }) => {
   );
 };
 
+function usePrevious(val) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = val;
+  }, [val]);
+  return ref.current;
+}
+
 const Header = () => {
   const [click, setClick] = useState("");
+  const [scrollPosition, setScrollPosition] = useState({});
+
+  const previousScrollPosition = usePrevious(scrollPosition);
+
   const handleClick = (anchor) => () => {
     const id = `${anchor}-section`;
     const element = document.getElementById(id);
@@ -74,18 +86,49 @@ const Header = () => {
     return () => setClick("");
   }, [click]);
 
+  const handleScroll = () => {
+    setScrollPosition(window.pageYOffset);
+  };
+
+  // subscribe to scrolling.
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const scrollDown = scrollPosition - previousScrollPosition > 0;
+    const translation = scrollDown ? "-200px" : "0px";
+  }, [scrollPosition]);
+
+  // Your logic should change the transform property of the underlying Box DOM element depending on the scroll direction.
+  // When scrolling up, the transform style property from the Box DOM element should be translateY(0).
+  // When scrolling down, the transform style property from the Box DOM element should be translateY(-200px)
+  //
+  // The useEffect hook
+  // The useRef hook
+  // Setting up listeners for the scroll eventwindow.addEventListener('scroll', handleScroll)
+  // Removing listeners for the scroll event:window.removeEventListener('scroll', handleScroll)
+  // Keeping track of the previous scroll position in a variable
+  const translation =
+    previousScrollPosition !== undefined &&
+    scrollPosition - previousScrollPosition > 0
+      ? "-200px"
+      : "0px";
+
   return (
     <Box
       position="fixed"
       top={0}
       left={0}
       right={0}
-      translateY={0}
+      transform={`translateY(${translation})`}
       transitionProperty="transform"
       transitionDuration=".3s"
       transitionTimingFunction="ease-in-out"
       backgroundColor="#18181b"
       zIndex={999}
+      // ref={ref}
     >
       <Box color="white" maxWidth="1280px" margin="0 auto">
         <HStack
